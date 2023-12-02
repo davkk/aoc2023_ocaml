@@ -36,3 +36,27 @@ let () =
   in
   Fmt.pr "@.%d@." result
 ;;
+
+let () =
+  let result =
+    lines
+    |> List.fold ~init:0 ~f:(fun acc line ->
+      let cubes = line |> Str.split (Str.regexp ": ") |> List.last_exn in
+      let r, g, b =
+        cubes
+        |> Str.split (Str.regexp {|; \|, |})
+        |> List.fold ~init:(0, 0, 0) ~f:(fun acc color ->
+          let r, g, b = acc in
+          match String.split ~on:' ' color with
+          | [ count; "red" ] when Int.of_string count > r ->
+            Int.of_string count, g, b
+          | [ count; "green" ] when Int.of_string count > g ->
+            r, Int.of_string count, b
+          | [ count; "blue" ] when Int.of_string count > b ->
+            r, g, Int.of_string count
+          | _ -> acc)
+      in
+      acc + (r * g * b))
+  in
+  Fmt.pr "@.%d@." result
+;;
