@@ -2,20 +2,6 @@ open Core
 
 let lines = Advent.read_lines "./inputs/day02.in"
 
-let is_valid_game cubes =
-  cubes
-  |> Str.split (Str.regexp "; ")
-  |> List.for_all ~f:(fun player ->
-    player
-    |> Str.split (Str.regexp ", ")
-    |> List.for_all ~f:(fun color ->
-      match String.split ~on:' ' color with
-      | [ count; "red" ] when Int.of_string count > 12 -> false
-      | [ count; "green" ] when Int.of_string count > 13 -> false
-      | [ count; "blue" ] when Int.of_string count > 14 -> false
-      | _ -> true))
-;;
-
 let () =
   let result =
     lines
@@ -26,7 +12,18 @@ let () =
         let game_id =
           String.split ~on:' ' game |> List.last_exn |> Int.of_string
         in
-        if is_valid_game all_cubes then acc + game_id else acc
+        let is_valid =
+          all_cubes
+          |> String.split_on_chars ~on:[ ';'; ',' ]
+          |> List.for_all ~f:(fun color ->
+            let color = String.strip color in
+            match String.split ~on:' ' color with
+            | [ count; "red" ] when Int.of_string count > 12 -> false
+            | [ count; "green" ] when Int.of_string count > 13 -> false
+            | [ count; "blue" ] when Int.of_string count > 14 -> false
+            | _ -> true)
+        in
+        if is_valid then acc + game_id else acc
       | _ -> failwith "lol")
   in
   Fmt.pr "@.%d@." result
