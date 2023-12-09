@@ -1,4 +1,6 @@
 (executables
- (public_names day01 day02 day03 day04)
- (names day01 day02 day03 day04)
- (libraries advent fmt str re))
+ (public_names day01 day02 day03 day04 day07)
+ (names day01 day02 day03 day04 day07)
+ (preprocess
+  (pps ppx_deriving.show))
+ (libraries advent fmt str re ppx_deriving))
