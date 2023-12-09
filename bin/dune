@@ -2,5 +2,5 @@
  (public_names day01 day02 day03 day04 day07)
  (names day01 day02 day03 day04 day07)
  (preprocess
-  (pps ppx_deriving.show))
+  (pps ppx_deriving.show ppx_deriving.enum))
  (libraries advent fmt str re ppx_deriving))
